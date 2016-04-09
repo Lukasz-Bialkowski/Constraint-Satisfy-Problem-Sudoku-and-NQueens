@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="algorithms.Sudoku">
+  <grid id="27dc6" binding="MainPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="50" vgap="30">
+    <margin top="24" left="24" bottom="24" right="24"/>
+    <constraints>
+      <xy x="20" y="20" width="610" height="400"/>
+    </constraints>
+    <properties>
+      <font name="Calibri Light"/>
+      <foreground color="-6834245"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="a4471" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <model>
+            <item value="4"/>
+            <item value="9"/>
+            <item value="16"/>
+          </model>
+        </properties>
+      </component>
+      <component id="9d9d9" class="javax.swing.JButton" binding="startButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <text value="Start"/>
+        </properties>
+      </component>
+      <component id="cfcf2" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <text value="Wybierz rozmiar planszy:"/>
+        </properties>
+      </component>
+      <component id="5e4f" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <text value="Liczba pustych wartosci:"/>
+        </properties>
+      </component>
+      <component id="27faa" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+        </properties>
+      </component>
+      <component id="e219" class="javax.swing.JRadioButton" binding="BacktrackingAlgorithm">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <selected value="true"/>
+          <text value="Backtracking Algorithm"/>
+        </properties>
+      </component>
+      <component id="cef92" class="javax.swing.JRadioButton" binding="ForwardCheckingAlgorithm">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <text value="Forward Checking Algorithm"/>
+        </properties>
+      </component>
+      <component id="cd522" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Calibri Light"/>
+          <text value="Wybierz algorytm:"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="buttonGroup1">
+      <member id="cef92"/>
+      <member id="cef92"/>
+      <member id="e219"/>
+    </group>
+  </buttonGroups>
+</form>

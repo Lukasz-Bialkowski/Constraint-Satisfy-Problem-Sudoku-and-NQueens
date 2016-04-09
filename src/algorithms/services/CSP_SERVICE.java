@@ -1,6 +1,11 @@
 package algorithms.services;
 
+import algorithms.algorithm.SudokuFC;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class CSP_SERVICE {
 
@@ -83,4 +88,48 @@ public class CSP_SERVICE {
             System.out.println();
         }
     }
+
+    public static String generateStringSudoku(int[][] board) {
+        String str = "";
+        for (int i = 1; i <= board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (j % (int) Math.sqrt(board.length) == 0)
+                    str += "     ";
+                str += String.format("%4s", board[i - 1][j] + "");
+            }
+            if (i % (int) Math.sqrt(board.length) == 0)
+                str += "\n";
+            str += "\n";
+        }
+        return str;
+    }
+
+    public static String generateStringQueens(int[][] board) {
+        String str = "";
+        for (int i = 1; i <= board.length; i++) {
+            str += "| ";
+            for (int j = 0; j < board.length; j++) {
+                str += String.format("%6s", board[i - 1][j] + "");
+            }
+            str += "  |\n";
+        }
+        return str;
+    }
+
+    public static String htmlArray(int[][] data) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>\n");
+        sb.append("<table>\n");
+        for (int row = 0; row < data.length; row++) {
+            sb.append("\t<tr>\n");
+            for (int col = 0; col < data[0].length; col++) {
+                sb.append("\t\t<td> " + data[row][col] + " </td>\n");
+            }
+            sb.append("\t</tr>\n");
+        }
+        sb.append("</table>\n");
+        sb.append("</html>");
+        return sb.toString();
+    }
+
 }

@@ -9,7 +9,7 @@ public class Main {
     public static void main(String args[]) {
         queensbtTest(10);
         sudokubtTest(9,30);
-        queensfcTest(10);
+        queensfcTest(7);
         sudokufcTest(9,36);
     }
 
