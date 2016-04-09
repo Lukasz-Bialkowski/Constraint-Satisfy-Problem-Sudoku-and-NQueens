@@ -2,25 +2,25 @@ import algorithms.algorithm.QueensBT;
 import algorithms.algorithm.QueensFC;
 import algorithms.algorithm.SudokuBT;
 import algorithms.algorithm.SudokuFC;
-import algorithms.services.SudokuService;
+import algorithms.services.CSP_SERVICE;
 
 public class Main {
 
     public static void main(String args[]) {
-        sudokubtTest(9, 30);
-        queensbtTest(9);
-        queensfcTest(9);
-        sudokufcTest(9,30);
+        queensbtTest(10);
+        sudokubtTest(9,30);
+        queensfcTest(10);
+        sudokufcTest(9,36);
     }
 
     public static void queensbtTest(int problemsize) {
         QueensBT queensbt;
         queensbt = new QueensBT(problemsize);
         System.out.println("Queens BT");
-        SudokuService.printBoard(queensbt.board());
+        CSP_SERVICE.printqueensBoard(queensbt.board());
         queensbt.algorithm(0);
         System.out.println();
-        SudokuService.printBoard(queensbt.board());
+        CSP_SERVICE.printqueensBoard(queensbt.board());
         System.out.println("*************************************");
     }
 
@@ -28,10 +28,10 @@ public class Main {
         SudokuBT sudokubt;
         sudokubt = new SudokuBT(size, empty);
         System.out.println("Sudoku BT");
-        SudokuService.printBoard(sudokubt.board());
+        CSP_SERVICE.printBoard(sudokubt.board());
         sudokubt.algorithm();
         System.out.println();
-        SudokuService.printBoard(sudokubt.board());
+        CSP_SERVICE.printBoard(sudokubt.board());
         System.out.println("*************************************");
     }
 
@@ -39,10 +39,10 @@ public class Main {
         QueensFC queensfc;
         queensfc = new QueensFC(problemsize);
         System.out.println("Queens FC");
-        SudokuService.printBoard(queensfc.board());
+        CSP_SERVICE.printqueensBoard(queensfc.board());
         queensfc.algorithm();
         System.out.println();
-        SudokuService.printBoard(queensfc.board());
+        CSP_SERVICE.printqueensBoard(queensfc.board());
         System.out.println("*************************************");
     }
 
@@ -50,10 +50,10 @@ public class Main {
         SudokuFC sudokufc;
         sudokufc = new SudokuFC(size, empty);
         System.out.println("Sudoku FC");
-        SudokuService.printBoard(sudokufc.board());
+        CSP_SERVICE.printBoard(sudokufc.board());
         sudokufc.algorithm();
         System.out.println();
-        SudokuService.printBoard(sudokufc.board());
+        CSP_SERVICE.printBoard(sudokufc.board());
         System.out.println("*************************************");
     }
 

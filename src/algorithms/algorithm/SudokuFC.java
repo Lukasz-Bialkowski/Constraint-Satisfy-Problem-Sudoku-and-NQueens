@@ -1,7 +1,7 @@
 package algorithms.algorithm;
 
 import algorithms.dto.Point;
-import algorithms.services.SudokuService;
+import algorithms.services.CSP_SERVICE;
 
 import java.util.*;
 
@@ -15,7 +15,7 @@ public class SudokuFC {
 
     public SudokuFC(int boardSize, int empty) {
         this.boxSize = (int) Math.sqrt(boardSize);
-        this.sudoku = SudokuService.createSudokuBoard(boardSize, empty);
+        this.sudoku = CSP_SERVICE.createSudokuBoard(boardSize, empty);
         columnVorbiddenDomains = new ArrayList<>(boardSize);
         boxVorbiddenDomains = new ArrayList<>(boardSize);
         rowVorbiddenDomains = new ArrayList<>(boardSize);

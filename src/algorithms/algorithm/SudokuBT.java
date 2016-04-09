@@ -1,14 +1,14 @@
 package algorithms.algorithm;
 
 import algorithms.dto.BoardVariable;
-import algorithms.services.SudokuService;
+import algorithms.services.CSP_SERVICE;
 
 public class SudokuBT {
 
     int[][] sudokuBoard;
 
     public SudokuBT(int boardSize, int emptyVar) {
-        sudokuBoard = SudokuService.createSudokuBoard(boardSize, emptyVar);
+        sudokuBoard = CSP_SERVICE.createSudokuBoard(boardSize, emptyVar);
     }
 
 
