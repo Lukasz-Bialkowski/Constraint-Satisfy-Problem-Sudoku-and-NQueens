@@ -1,22 +1,14 @@
-package algorithms;
+package algorithms.algorithm;
 
-import java.util.HashSet;
+import algorithms.devpackage.BoardVariable;
+import algorithms.services.SudokuService;
 
-public class SudokuBTAlgorithm {
+public class SudokuBT {
 
     int[][] sudokuBoard;
 
-    public SudokuBTAlgorithm(int boardSize, int emptyVar) {
-        sudokuBoard = createSudokuBoard(boardSize, emptyVar);
-    }
-
-    public void printBoard() {
-        for (int i = 0; i < sudokuBoard.length; i++) {
-            for (int j = 0; j < sudokuBoard.length; j++) {
-                System.out.print(sudokuBoard[i][j]+" ");
-            }
-            System.out.println();
-        }
+    public SudokuBT(int boardSize, int emptyVar) {
+        sudokuBoard = SudokuService.createSudokuBoard(boardSize, emptyVar);
     }
 
     public int[][] createAndInitializeBoard(int boardSize) {
@@ -102,53 +94,11 @@ public class SudokuBTAlgorithm {
         for (int i = 1; i <= sudokuBoard.length; i++) {
             if (constraintsSatisfyied(i, variable)) {
                 sudokuBoard[variable.getRow()][variable.getColumn()] = i;
-                if (algorithm()) {
-                    return true;
-                }
+                if (algorithm()) {return true;}
                 sudokuBoard[variable.getRow()][variable.getColumn()] = 0;
             }
         }
-
         return false;
-    }
-
-    public int[][] createSudokuBoard(int boardSize, int emptyVariables) {
-
-        int[][] sudoku;
-
-        switch (boardSize) {
-            case 4:
-                int[][] temp1 = {{3, 1, 2, 4}, {4, 2, 3, 1}, {1, 3, 4, 2}, {2, 4, 1, 3}};
-                sudoku = temp1;
-                break;
-            default:
-                int[][] temp2 =
-                        {
-                                {3, 1, 6, 5, 7, 8, 4, 9, 2},
-                                {5, 2, 9, 1, 3, 4, 7, 6, 8},
-                                {4, 8, 7, 6, 2, 9, 5, 3, 1},
-                                {2, 6, 3, 4, 1, 5, 9, 8, 7},
-                                {9, 7, 4, 8, 6, 3, 1, 2, 5},
-                                {8, 5, 1, 7, 9, 2, 6, 4, 3},
-                                {1, 3, 8, 9, 4, 7, 2, 5, 6},
-                                {6, 9, 2, 3, 5, 1, 8, 7, 4},
-                                {7, 4, 5, 2, 8, 6, 3, 1, 9}
-                        };
-                sudoku = temp2;
-                break;
-        }
-
-        HashSet<Integer> set = new HashSet<>();
-        while(set.size() != emptyVariables)
-            set.add(randomizer(boardSize*boardSize));
-        for (int i : set) {
-            sudoku[i/boardSize][i%boardSize]=0;
-        }
-        return sudoku;
-    }
-
-    public int randomizer(int max) {
-        return (int) (Math.random() * max);
     }
 
     public boolean constraintsSatisfyied(int selectedValue, BoardVariable variable){
@@ -158,5 +108,9 @@ public class SudokuBTAlgorithm {
         } else {
             return true;
         }
+    }
+
+    public int[][] board(){
+        return sudokuBoard;
     }
 }

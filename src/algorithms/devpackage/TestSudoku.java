@@ -1,17 +1,16 @@
-package algorithms;
+package algorithms.devpackage;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
-public class SudokuFCAlgorithm {
+public class TestSudoku {
     int[][] sudokuBoard;
     int size;
-    ArrayList<ArrayList<Integer>> D; // = new ArrayList<ArrayList<Integer>>();
+    ArrayList<ArrayList<Integer>> D;
 
-    public SudokuFCAlgorithm(int boardSize, int emptyVariables) {
+    public TestSudoku(int boardSize, int emptyVariables) {
         size = (int) Math.sqrt(boardSize);
         sudokuBoard = createSudokuBoard(boardSize, emptyVariables);
-
-//        sudokuBoard = new int[size * size][size * size];
         D = new ArrayList<ArrayList<Integer>>(size * size * size * size);
         initializeDomain();
     }
@@ -65,22 +64,12 @@ public class SudokuFCAlgorithm {
         }
     }
 
-    public boolean solve() {
-        ArrayList<Integer> sudokuAsList = GetAssignment(sudokuBoard);
-        if (INITIAL_FC(sudokuAsList)) {
-            sudokuAsList = FC(sudokuAsList);
-            if (sudokuAsList != null) {
-                sudokuBoard = GetPuzzle(sudokuAsList);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    public void solve() {
+        ArrayList<Integer> sudokuAsList = generateSudokuVariables();
+        algorithm(sudokuAsList);
     }
 
-    public ArrayList<Integer> FC(ArrayList<Integer> asn) {
+    public ArrayList<Integer> algorithm(ArrayList<Integer> asn) {
         boolean complete = true;
         int X;
         for (X = 0; X < asn.size(); X++) {
@@ -98,10 +87,10 @@ public class SudokuFCAlgorithm {
                 Dold.add(DoldElement);
             }
             ArrayList <Integer> temp = new ArrayList<Integer>(D.get(X));
-            for (Integer V : temp) {
-                if (AC_FC(X, V)) {
-                    asn.set(X, V);
-                    ArrayList<Integer> R = FC(asn);
+            for (Integer value : temp) {
+                if (handleConstraints(X, value)) {
+                    asn.set(X, value );
+                    ArrayList<Integer> R = algorithm(asn);
                     if (R != null) {
                         return R;
                     } else {
@@ -117,141 +106,108 @@ public class SudokuFCAlgorithm {
                 }
             }
         }
-        return null;// failure
+        return null;
     }
 
-    public boolean AC_FC(Integer X, Integer V) {
+    public boolean handleConstraints(Integer X, Integer value) {
         D.get(X).clear();
-        D.get(X).add(V);
-        ArrayList<Integer> Q = new ArrayList<Integer>(); // list of all relevant
+        D.get(X).add(value);
+        ArrayList<Integer> neighbours = new ArrayList<Integer>(); // list of all relevant
 
-        int col = GetColumn(X);
-        int row = GetRow(X);
+        int col = columnInBoard(X);
+        int row = rowInBoard(X);
+
+        for (int i = 0; i < size * size; i++) {
+            if (variableIndex(i, col) > X) {
+                neighbours.add(variableIndex(i, col));
+            }
+        }
+        for (int j = 0; j < size * size; j++) {
+            if (variableIndex(row, j) > X) {
+                neighbours.add(variableIndex(row, j));
+            }
+        }
+
         int cell_x = row / size;
         int cell_y = col / size;
-
-        // all variables in the same column
-        for (int i = 0; i < size * size; i++) {
-            if (GetVariable(i, col) > X) {
-                Q.add(GetVariable(i, col));
-            }
-        }
-        // all variables in the same row
-        for (int j = 0; j < size * size; j++) {
-            if (GetVariable(row, j) > X) {
-                Q.add(GetVariable(row, j));
-            }
-        }
-        // all variables in the same size*size box
         for (int i = cell_x * size; i <= cell_x * size + 2; i++) {
             for (int j = cell_y * size; j <= cell_y * size + 2; j++) {
-                if (GetVariable(i, j) > X) {
-                    Q.add(GetVariable(i, j));
+                if (variableIndex(i, j) > X) {
+                    neighbours.add(variableIndex(i, j));
                 }
             }
         }
 
-        // REVISE(Y,X)
-        boolean consistent = true;
-        while (!Q.isEmpty() && consistent) {
-            Integer Y = (Integer) Q.remove(0);
-            if (REVISE(Y, X)) {
-                consistent = !D.get(Y).isEmpty();
-            }
+        if (!clearDomains(neighbours, X)) {
+            return false;
         }
-        return consistent;
+        return true;
+
     }
 
-    public boolean REVISE(int neighbourIndex, int selectedVariable) {
+    public boolean clearDomains(List<Integer> neighbours, int selectedValue) {
 
-        boolean DELETED = false;
-        ArrayList<Integer> neighbourDomain = D.get(neighbourIndex);
-        ArrayList<Integer> selectedDomain = D.get(selectedVariable);
-
-        for (int i = 0; i < neighbourDomain.size(); i++) {
-            int vi = neighbourDomain.get(i);
-            ArrayList<Integer> xiEqVal = new ArrayList<Integer>(sudokuBoard.length * sudokuBoard.length);
-            for (int var = 0; var < sudokuBoard.length * sudokuBoard.length; var++) {
-                xiEqVal.add(var, 0);
+        List<Integer> neighbourDomain;
+        for (int nIndex : neighbours) {
+            neighbourDomain = D.get(nIndex);
+            int i = neighbourDomain.indexOf(selectedValue);
+            if (i!=-1) {
+                System.out.println(i);
+                neighbourDomain.remove(i);
             }
-
-            xiEqVal.set(neighbourIndex, vi);
-            boolean hasSupport = false;
-
-            for (int j = 0; j < selectedDomain.size(); j++) {
-                Integer vj = (Integer) selectedDomain.get(j);
-                if (CONSISTENT(xiEqVal, selectedVariable, vj)) {
-                    hasSupport = true;
-                    break;
-                }
+            if (neighbourDomain.isEmpty()) {
+                return false;
             }
-
-            if (!hasSupport) {
-                neighbourDomain.remove((Integer) vi);
-                DELETED = true;
-            }
-
         }
 
-        return DELETED;
+        return true;
     }
 
-    public boolean CONSISTENT(ArrayList<Integer> asn, Integer variable,
-                              Integer val) {
+    public boolean isAssigmentProper(ArrayList<Integer> sudokuVariablesList, int variable, int value) {
         Integer v1, v2;
-
-        // variable to be assigned must be clear
-        assert (asn.get(variable) == 0);
-        asn.set(variable, val);
-
-        // alldiff(col[i])
+        sudokuVariablesList.set(variable, value);
         for (int i = 0; i < size * size; i++) {
             for (int j = 0; j < size * size; j++) {
                 for (int k = 0; k < size * size; k++) {
                     if (k != j) {
-                        v1 = (Integer) asn.get(GetVariable(i, j));
-                        v2 = (Integer) asn.get(GetVariable(i, k));
+                        v1 = sudokuVariablesList.get(variableIndex(i, j));
+                        v2 = sudokuVariablesList.get(variableIndex(i, k));
                         if (v1 != 0 && v2 != 0 && v1.compareTo(v2) == 0) {
-                            asn.set(variable, 0);
+                            sudokuVariablesList.set(variable, 0);
                             return false;
                         }
                     }
                 }
             }
         }
-
-        // alldiff(row[j])
         for (int j = 0; j < size * size; j++) {
             for (int i = 0; i < size * size; i++) {
                 for (int k = 0; k < size * size; k++) {
                     if (k != i) {
-                        v1 = (Integer) asn.get(GetVariable(i, j));
-                        v2 = (Integer) asn.get(GetVariable(k, j));
+                        v1 = sudokuVariablesList.get(variableIndex(i, j));
+                        v2 = sudokuVariablesList.get(variableIndex(k, j));
                         if (v1 != 0 && v2 != 0 && v1.compareTo(v2) == 0) {
-                            asn.set(variable, 0);
+                            sudokuVariablesList.set(variable, 0);
                             return false;
                         }
                     }
                 }
             }
         }
-
-        // alldiff(block[size*i,size*j])
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 for (int i1 = 0; i1 < size; i1++) {
                     for (int j1 = 0; j1 < size; j1++) {
-                        int var1 = GetVariable(size * i + i1, size * j + j1);
+                        int var1 = variableIndex(size * i + i1, size * j + j1);
                         for (int i2 = 0; i2 < size; i2++) {
                             for (int j2 = 0; j2 < size; j2++) {
-                                int var2 = GetVariable(size * i + i2, size * j
-                                        + j2);
+                                int var2 = variableIndex(size * i + i2, size * j+ j2);
                                 if (var1 != var2) {
-                                    v1 = (Integer) asn.get(var1);
-                                    v2 = (Integer) asn.get(var2);
+                                    v1 = sudokuVariablesList.get(var1);
+                                    v2 = sudokuVariablesList.get(var2);
                                     if (v1 != 0 && v2 != 0
                                             && v1.compareTo(v2) == 0) {
-                                        asn.set(variable, 0);
+                                        sudokuVariablesList.set(variable, 0);
                                         return false;
                                     }
                                 }
@@ -262,8 +218,7 @@ public class SudokuFCAlgorithm {
                 }
             }
         }
-
-        asn.set(variable, 0);
+        sudokuVariablesList.set(variable, 0);
         return true;
     }
 
@@ -271,23 +226,11 @@ public class SudokuFCAlgorithm {
 
         for (int i = 0; i < sudokuVariables.size(); i++) {
             int sudokuVariable = sudokuVariables.get(i);
-
             if (sudokuVariable != 0) {
-
                 ArrayList<Integer> neighbours = constrainsNeighboursIndexes(i);
-
-                boolean domainIsEmpty = true;
-
-                for (int neighbourIndex : neighbours) {
-                    // usun z dziedziny ta wartosc
-                    // sprawdz czy nie jest po usunieciu pusta
-                }
-
-                while (!neighbours.isEmpty() && consistent) {
-                    int Y = neighbours.remove(0);
-                    if (REVISE(Y, i)) {
-                        consistent = !D.get(Y).isEmpty();
-                    }
+                if(!clearDomains(neighbours, sudokuVariable)){
+                    //rollback
+                    // sudokuVariable to global scope
                 }
             }
         }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/constrains-satisfy-problem.iml" filepath="$PROJECT_DIR$/constrains-satisfy-problem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/constrains-satisfy-problem.iml" filepath="$PROJECT_DIR$/.idea/constrains-satisfy-problem.iml" />
     </modules>
   </component>
 </project>

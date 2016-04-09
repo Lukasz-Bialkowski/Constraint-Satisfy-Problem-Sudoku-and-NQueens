@@ -1,14 +1,13 @@
-package algorithms;
+package algorithms.algorithm;
 
-public class NQueensBTAlgorithm {
+public class QueensBT {
 
     private int queens;
     private int chessBoard[][];
 
-    public NQueensBTAlgorithm(int problemSize) {
+    public QueensBT(int problemSize) {
         queens = problemSize;
         chessBoard = createAndInitializeBoard(queens);
-//        chessBoard = testInitializing(queens);
     }
 
     private int[][] createAndInitializeBoard(int boardSize) {
@@ -38,7 +37,7 @@ public class NQueensBTAlgorithm {
                 chessBoard[i][j] = 1;
                 if(algorithm(i+1)){return true;}
             }
-
+            chessBoard[i][j] = 0;
         }
         return false;
     }
@@ -50,15 +49,6 @@ public class NQueensBTAlgorithm {
             return false;
         } else {
             return true;
-        }
-    }
-
-    public void printBoard() {
-        for (int i = 0; i < queens; i++) {
-            for (int j = 0; j < queens; j++) {
-                System.out.print(chessBoard[i][j]+" ");
-            }
-            System.out.println();
         }
     }
 
@@ -109,5 +99,9 @@ public class NQueensBTAlgorithm {
             }
         }
         return true;
+    }
+
+    public int[][] board(){
+        return chessBoard;
     }
 }

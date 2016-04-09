@@ -1,28 +1,55 @@
-import algorithms.BoardVariable;
-import algorithms.NQueensBTAlgorithm;
-import algorithms.SudokuBTAlgorithm;
-import algorithms.SudokuFCAlgorithm;
+import algorithms.algorithm.QueensBT;
+import algorithms.algorithm.SudokuBT;
+import algorithms.algorithm.SudokuFC;
+import algorithms.devpackage.TestSudoku;
+import algorithms.dto.Point;
+import algorithms.services.SudokuService;
 
 public class Main {
 
     public static void main(String args[]) {
-//        NQueensBTAlgorithm nQueensBTAlgorithm = new NQueensBTAlgorithm(5);
-//        nQueensBTAlgorithm.printBoard();
-//        nQueensBTAlgorithm.algorithm(0);
-//        nQueensBTAlgorithm.printBoard();
+//        sudokubtTest(9, 5);
+//        queensbtTest(6);
 
-//        SudokuBTAlgorithm sudokuBTAlgorithm = new SudokuBTAlgorithm(9, 5);
-//        sudokuBTAlgorithm.printBoard();
-//        sudokuBTAlgorithm = new SudokuBTAlgorithm(4, 8);
-//        sudokuBTAlgorithm.printBoard();
-//        sudokuBTAlgorithm.algorithm();
-//        sudokuBTAlgorithm.printBoard();
-        //
-
-        SudokuFCAlgorithm sudokuFCAlgorithm = new SudokuFCAlgorithm(9,30);
-        sudokuFCAlgorithm.printBoard();
+        SudokuFC sudokuFC = new SudokuFC(4,10);
+        SudokuService.printBoard(sudokuFC.board());
+        sudokuFC.algorithm();
         System.out.println();
-        sudokuFCAlgorithm.solve();
-        sudokuFCAlgorithm.printBoard();
+        SudokuService.printBoard(sudokuFC.board());
+
     }
+
+    public static void queensbtTest(int problemsize) {
+        QueensBT queensbt;
+        queensbt = new QueensBT(problemsize);
+        SudokuService.printBoard(queensbt.board());
+        System.out.println(queensbt.algorithm(0));
+        SudokuService.printBoard(queensbt.board());
+    }
+
+    public static void sudokubtTest(int size, int empty) {
+        SudokuBT sudokubt;
+        sudokubt = new SudokuBT(size, empty);
+        SudokuService.printBoard(sudokubt.board());
+        sudokubt.algorithm();
+        SudokuService.printBoard(sudokubt.board());
+    }
+
+//    public static void queensfcTest() {
+
+//        QueensFC queensfc;
+//        queensfc = new QueensFC();
+//        SudokuService.printBoard(queensfc.board());
+//        queensfc.algorithm();
+//        SudokuService.printBoard(queensfc.board());
+//    }
+
+//    public static void sudokufcTest() {
+//        SudokuFC sudokufc;
+//        sudokufc = new SudokuBT(9, 5);
+//        SudokuService.printBoard(sudokufc.board());
+//        sudokufc.algorithm();
+//        SudokuService.printBoard(sudokufc.board());
+//    }
+
 }

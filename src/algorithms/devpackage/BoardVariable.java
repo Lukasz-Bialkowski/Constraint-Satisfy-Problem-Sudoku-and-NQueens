@@ -1,4 +1,4 @@
-package algorithms;
+package algorithms.devpackage;
 
 public class BoardVariable {
 
