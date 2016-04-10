@@ -42,6 +42,7 @@ public class Sudoku {
                         sudokuBT = new SudokuBT(iProblemSize, emptyPoints);
                         boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
                         JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
+                        System.out.println("SUDOKU BACKTRACKING MRV");
                         start = System.currentTimeMillis();
                         sudokuBT.algorithmMRV();
                         time = System.currentTimeMillis() - start;
@@ -51,6 +52,7 @@ public class Sudoku {
                         sudokuBT = new SudokuBT(iProblemSize, emptyPoints);
                         boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
                         JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
+                        System.out.println("SUDOKU BACKTRACKING CLEAN");
                         start = System.currentTimeMillis();
                         sudokuBT.algorithm();
                         time = System.currentTimeMillis() - start;
@@ -64,6 +66,7 @@ public class Sudoku {
                         sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
                         boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
                         JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        System.out.println("SUDOKU FORWARD CHECKING MRV");
                         start = System.currentTimeMillis();
                         sudokuFC.algorithmMRV();
                         time = System.currentTimeMillis() - start;
@@ -73,6 +76,7 @@ public class Sudoku {
                         sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
                         boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
                         JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        System.out.println("SUDOKU FORWARD CHECKING MRVLSV");
                         start = System.currentTimeMillis();
                         sudokuFC.algorithmMRVBV();
                         time = System.currentTimeMillis() - start;
@@ -83,6 +87,7 @@ public class Sudoku {
                         sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
                         boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
                         JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        System.out.println("SUDOKU FORWARD CHECKING CLEAN");
                         start = System.currentTimeMillis();
                         sudokuFC.algorithm();
                         time = System.currentTimeMillis() - start;

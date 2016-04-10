@@ -109,7 +109,7 @@
         </constraints>
         <properties>
           <enabled value="false"/>
-          <text value="MRV + BV"/>
+          <text value="LRV"/>
         </properties>
       </component>
     </children>
