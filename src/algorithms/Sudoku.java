@@ -18,6 +18,8 @@ public class Sudoku {
     private JRadioButton BacktrackingAlgorithm;
     private JRadioButton ForwardCheckingAlgorithm;
     private JSpinner spinner1;
+    private JCheckBox MRVCheckBox;
+    private JCheckBox BVCheckBox;
 
     public Sudoku() {
 
@@ -31,32 +33,80 @@ public class Sudoku {
                 int emptyPoints = (Integer) spinner1.getValue();
                 String problemSize = (String) comboBox1.getSelectedItem();
                 int iProblemSize = Integer.parseInt(problemSize);
+                long start;
+                long time;
 
                 if (BacktrackingAlgorithm.isSelected()) {
 
-                    sudokuBT = new SudokuBT(iProblemSize, emptyPoints);
-
-                    boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
-                    JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
-
-                    sudokuBT.algorithm();
-
-                    boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
-                    JOptionPane.showMessageDialog(null, "Rozwiazane zadanie:\n\n" + boardAfterAlgorithm);
+                    if (MRVCheckBox.isSelected()) {
+                        sudokuBT = new SudokuBT(iProblemSize, emptyPoints);
+                        boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
+                        JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
+                        start = System.currentTimeMillis();
+                        sudokuBT.algorithmMRV();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
+                        JOptionPane.showMessageDialog(null, "Rozwiazane zadanie (" + time + " ms )\n\n" + boardAfterAlgorithm);
+                    } else {
+                        sudokuBT = new SudokuBT(iProblemSize, emptyPoints);
+                        boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
+                        JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
+                        start = System.currentTimeMillis();
+                        sudokuBT.algorithm();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuBT.board());
+                        JOptionPane.showMessageDialog(null, "Rozwiazane zadanie (" + time + " ms )\n\n" + boardAfterAlgorithm);
+                    }
 
                 } else {
 
-                    sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
-
-                    boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
-                    JOptionPane.showMessageDialog(null, "Plansza poczatkowa:\n\n" + boardInitialyAsAString);
-
-                    sudokuFC.algorithm();
-
-                    boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
-                    JOptionPane.showMessageDialog(null, "Rozwiazane zadanie:\n\n" + boardAfterAlgorithm);
+                    if(MRVCheckBox.isSelected() && !BVCheckBox.isSelected()){
+                        sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
+                        boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        start = System.currentTimeMillis();
+                        sudokuFC.algorithmMRV();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Rozwiazane zadanie (" + time + " ms )\n\n" + boardAfterAlgorithm);
+                    } else if (MRVCheckBox.isSelected() && BVCheckBox.isSelected()) {
+                        sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
+                        boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        start = System.currentTimeMillis();
+                        sudokuFC.algorithmMRVBV();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Rozwiazane zadanie (" + time + " ms )\n\n" + boardAfterAlgorithm);
+                    }
+                    else {
+                        sudokuFC = new SudokuFC(iProblemSize, emptyPoints);
+                        boardInitialyAsAString = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Plansza poczatkowa\n\n" + boardInitialyAsAString);
+                        start = System.currentTimeMillis();
+                        sudokuFC.algorithm();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.generateStringSudoku(sudokuFC.board());
+                        JOptionPane.showMessageDialog(null, "Rozwiazane zadanie (" + time + " ms )\n\n" + boardAfterAlgorithm);
+                    }
                 }
 
+            }
+        });
+        ForwardCheckingAlgorithm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ForwardCheckingAlgorithm.isSelected()) {
+                    BVCheckBox.setEnabled(true);
+                }
+            }
+        });
+        BacktrackingAlgorithm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!ForwardCheckingAlgorithm.isSelected()) {
+                    BVCheckBox.setEnabled(false);
+                }
             }
         });
     }

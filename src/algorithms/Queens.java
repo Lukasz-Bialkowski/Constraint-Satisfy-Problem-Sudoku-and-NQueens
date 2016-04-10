@@ -17,6 +17,7 @@ public class Queens {
     private JRadioButton ForwardCheckingAlgorithm;
     private JSpinner spinner1;
     private JButton button1;
+    private JCheckBox MRVCheckBox;
 
     public Queens() {
         panel1.setSize(400, 600);
@@ -28,28 +29,48 @@ public class Queens {
                 String boardInitialyAsAString;
                 String boardAfterAlgorithm;
                 int problemSize = (Integer) spinner1.getValue();
+                long start;
+                long time;
 
                 if (BacktrackingAlgorithm.isSelected()) {
 
-                    queensBT = new QueensBT(problemSize);
-
-                    boardInitialyAsAString = CSP_SERVICE.htmlArray(queensBT.board());
-
-                    // SOLVING PROBLEM
-                    queensBT.algorithm(0);
-
-                    boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensBT.board());
+                    if (MRVCheckBox.isSelected()) {
+                        queensBT = new QueensBT(problemSize);
+                        boardInitialyAsAString = CSP_SERVICE.htmlArray(queensBT.board());
+                        start = System.currentTimeMillis();
+                        // SOLVING PROBLEM
+                        queensBT.algorithm(0);
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensBT.board());
+                    } else {
+                        queensBT = new QueensBT(problemSize);
+                        boardInitialyAsAString = CSP_SERVICE.htmlArray(queensBT.board());
+                        start = System.currentTimeMillis();
+                        // SOLVING PROBLEM
+                        queensBT.algorithm(0);
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensBT.board());
+                    }
 
                 } else {
 
-                    queensFC = new QueensFC(problemSize);
-
-                    boardInitialyAsAString = CSP_SERVICE.htmlArray(queensFC.board());
-
-                    // SOLVING PROBLEM
-                    queensFC.algorithm();
-
-                    boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensFC.board());
+                    if (MRVCheckBox.isSelected()) {
+                        queensFC = new QueensFC(problemSize);
+                        boardInitialyAsAString = CSP_SERVICE.htmlArray(queensFC.board());
+                        start = System.currentTimeMillis();
+                        // SOLVING PROBLEM
+                        queensFC.algorithmMRV();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensFC.board());
+                    } else {
+                        queensFC = new QueensFC(problemSize);
+                        boardInitialyAsAString = CSP_SERVICE.htmlArray(queensFC.board());
+                        start = System.currentTimeMillis();
+                        // SOLVING PROBLEM
+                        queensFC.algorithm();
+                        time = System.currentTimeMillis() - start;
+                        boardAfterAlgorithm = CSP_SERVICE.htmlArray(queensFC.board());
+                    }
 
                 }
 
@@ -57,7 +78,7 @@ public class Queens {
                 JFrame outputWindow = new JFrame("CSP PROBLEM SOLVED");
                 output.setOut(boardAfterAlgorithm);
                 output.setIn(boardInitialyAsAString);
-                output.setExecTime("" + 342.434 + "ms");
+                output.setExecTime(time + "ms");
                 outputWindow.setContentPane(output.getPanel1());
                 outputWindow.pack();
                 outputWindow.setVisible(true);
