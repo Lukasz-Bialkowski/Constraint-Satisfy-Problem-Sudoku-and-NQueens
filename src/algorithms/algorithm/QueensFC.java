@@ -2,9 +2,7 @@ package algorithms.algorithm;
 
 import algorithms.dto.Point;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class QueensFC {
 
@@ -42,6 +40,103 @@ public class QueensFC {
         }
 
         return false;
+    }
+
+    public boolean algorithmMRV() {
+
+        List<Point> points = emptyPoints();
+        if (points.isEmpty()) {
+            return true;
+        }
+
+        HashMap<Point, Integer> domainValueDomainSumms = new HashMap<>();
+        for (Point point : points) {
+            domainValueDomainSumms.put(point, calculateNumberOfConstraintVariables(point));
+        }
+
+        List<Point> pointsSorted = QueensFC.sortByValueAndExtractList(domainValueDomainSumms);
+
+        for (Point point : pointsSorted) {
+            setValue(point, 1);
+            this.queensPlacedCounter++;
+            refreshDomainsIn(point);
+            if (isDomainEmpty()) {
+
+            } else {
+                if (algorithmMRV()) {
+                    return true;
+                }
+            }
+            setValue(point, 0);
+            refreshDomainsOut(point);
+            this.queensPlacedCounter--;
+        }
+
+        return false;
+    }
+
+    private Integer calculateNumberOfConstraintVariables(Point point) {
+        int sum = 0;
+
+        int column = point.getColumn();
+        int row = point.getRow();
+
+        for (int i = 0; i < this.size; i++) {
+            if (domain[i][column] == 0)
+                sum += 1;
+            if (domain[row][i] == 0)
+                sum += 1;
+        }
+
+        int i = row;
+        int j = column;
+        while (i < size && i >= 0 && j < size && j >= 0) {
+            if (domain[i][j] == 0) sum += 1;
+            i--;
+            j++;
+        }
+        i = row;
+        j = column;
+        while (i < size && i >= 0 && j < size && j >= 0) {
+            if (domain[i][j] == 0) sum += 1;
+            i++;
+            j--;
+        }
+        i = row;
+        j = column;
+        while (i < size && i >= 0 && j < size && j >= 0) {
+            if (domain[i][j] == 0) sum += 1;
+            i--;
+            j--;
+        }
+        i = row;
+        j = column;
+        while (i < size && i >= 0 && j < size && j >= 0) {
+            if (domain[i][j] == 0) sum += 1;
+            i++;
+            j++;
+        }
+        i = row;
+        j = column;
+
+
+        return sum;
+    }
+
+    public static <K, V extends Comparable<? super V>> List<K> sortByValueAndExtractList(Map<K, V> map) {
+        List<Map.Entry<K, V>> list =
+                new LinkedList<Map.Entry<K, V>>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        List<K> result = new ArrayList<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.add(entry.getKey());
+        }
+        return result;
     }
 
     public void refreshDomainsIn(Point point) {

@@ -4,6 +4,7 @@ import algorithms.dto.Point;
 import algorithms.services.CSP_SERVICE;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class SudokuFC {
 
@@ -40,6 +41,119 @@ public class SudokuFC {
 
         }
         return false;
+    }
+
+    public boolean algorithmMRV() {
+
+        List<Point> points = findEmptyPoints();
+        if (points.isEmpty()) {
+            return true;
+        }
+
+        Point bestPointSoFar;
+        int minimalDomainSize;
+        bestPointSoFar = points.get(0);
+        minimalDomainSize = availableValueFor(bestPointSoFar).size();
+
+        for (Point point : points) {
+            int domainSize = availableValueFor(point).size();
+            if (domainSize < minimalDomainSize) {
+                minimalDomainSize = domainSize;
+                bestPointSoFar = point;
+            }
+        }
+
+        List<Integer> availableValuesFor = availableValueFor(bestPointSoFar);
+        for (Integer value : availableValuesFor) {
+            setValue(bestPointSoFar, value);
+            refreshDomains(bestPointSoFar);
+            if (isDomainEmpty()) {
+            } else {
+                if (algorithmMRV()) {
+                    return true;
+                }
+            }
+            setValue(bestPointSoFar, 0);
+            refreshDomains(bestPointSoFar);
+
+        }
+        return false;
+    }
+
+    public boolean algorithmMRVBV() {
+
+        List<Point> points = findEmptyPoints();
+        if (points.isEmpty()) {
+            return true;
+        }
+
+        Point bestPointSoFar;
+        int minimalDomainSize;
+        bestPointSoFar = points.get(0);
+        minimalDomainSize = availableValueFor(bestPointSoFar).size();
+
+        for (Point point : points) {
+            int domainSize = availableValueFor(point).size();
+            if (domainSize < minimalDomainSize) {
+                minimalDomainSize = domainSize;
+                bestPointSoFar = point;
+            }
+        }
+
+        HashMap<Integer, Integer> domainValueDomainSumms = new HashMap<>();
+        List<Integer> pointDomain = availableValueFor(bestPointSoFar);
+
+        for (Integer pointDomainValue : pointDomain) {
+            setValue(bestPointSoFar, pointDomainValue);
+            refreshDomains(bestPointSoFar);
+
+            domainValueDomainSumms.put(pointDomainValue, calculateDomainSizesOfNeighbours());
+
+            setValue(bestPointSoFar, 0);
+            refreshDomains(bestPointSoFar);
+        }
+
+        List<Integer> domainsSorted = SudokuFC.sortByValueAndExtractList(domainValueDomainSumms);
+
+        for (Integer value : domainsSorted) {
+            setValue(bestPointSoFar, value);
+            refreshDomains(bestPointSoFar);
+            if (isDomainEmpty()) {
+            } else {
+                if (algorithmMRVBV()) {
+                    return true;
+                }
+            }
+            setValue(bestPointSoFar, 0);
+            refreshDomains(bestPointSoFar);
+
+        }
+        return false;
+    }
+
+    private Integer calculateDomainSizesOfNeighbours() {
+        int summ = 0;
+        List<Point> emptyPoints = findEmptyPoints();
+        for (Point point : emptyPoints) {
+            summ += availableValueFor(point).size();
+        }
+        return summ;
+    }
+
+    public static <K, V extends Comparable<? super V>> List<K> sortByValueAndExtractList(Map<K, V> map) {
+        List<Map.Entry<K, V>> list =
+                new LinkedList<Map.Entry<K, V>>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        List<K> result = new ArrayList<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.add(entry.getKey());
+        }
+        return result;
     }
 
     public void initDomains(){
@@ -155,6 +269,18 @@ public class SudokuFC {
             }
         }
         return null;
+    }
+
+    public List<Point> findEmptyPoints() {
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < boxSize * boxSize; i++) {
+            for (int j = 0; j < boxSize * boxSize; j++) {
+                if (sudoku[i][j] == 0) {
+                    points.add(new Point(i, j));
+                }
+            }
+        }
+        return points;
     }
 
     public void setValue(Point point, Integer value) {
